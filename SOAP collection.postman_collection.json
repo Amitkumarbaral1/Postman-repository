@@ -1,0 +1,370 @@
+{
+	"info": {
+		"_postman_id": "aa1bbaf1-8063-4a8a-828c-52cc636dfe5a",
+		"name": "SOAP collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "New Request",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"John\",\r\n    \"email\": \"john@example.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://httpbin.org/post",
+					"protocol": "https",
+					"host": [
+						"httpbin",
+						"org"
+					],
+					"path": [
+						"post"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Modified parm request",
+			"protocolProfileBehavior": {
+				"followAuthorizationHeader": false,
+				"removeRefererHeaderOnRedirect": false,
+				"disabledSystemHeaders": {},
+				"followRedirects": true,
+				"strictSSL": true,
+				"followOriginalHttpMethod": false
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://api.nytimes.com/svc/books/v3/lists.json?api-key=OKGQZ4C9RlVysJRMXsgpWKm4l4qxOWSR&list=hardcover-nonfiction&rank=5&published_date=2021-10-21&rank_last_week=2",
+					"protocol": "https",
+					"host": [
+						"api",
+						"nytimes",
+						"com"
+					],
+					"path": [
+						"svc",
+						"books",
+						"v3",
+						"lists.json"
+					],
+					"query": [
+						{
+							"key": "api-key",
+							"value": "OKGQZ4C9RlVysJRMXsgpWKm4l4qxOWSR"
+						},
+						{
+							"key": "list",
+							"value": "hardcover-nonfiction"
+						},
+						{
+							"key": "rank",
+							"value": "5"
+						},
+						{
+							"key": "published_date",
+							"value": "2021-10-21"
+						},
+						{
+							"key": "rank_last_week",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create List",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"List should be created\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.name).to.eql(\"ToDo\");\r",
+							"    pm.expect(jsonData.closed).to.eql(false);\r",
+							"});\r",
+							"pm.test(\"List was created inside the board\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.idBoard).to.eql(\"6177a9c6fecb350403a253d2\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "https://api.trello.com/1/lists?name=ToDo&idBoard=6177a9c6fecb350403a253d2&key=2f70806585a5137667231fd8c6f3d353&token=52a0a23766ab6f94a8885c809a10f4598b6bf312310d97018ae73f9e76744e04",
+					"protocol": "https",
+					"host": [
+						"api",
+						"trello",
+						"com"
+					],
+					"path": [
+						"1",
+						"lists"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "ToDo"
+						},
+						{
+							"key": "idBoard",
+							"value": "6177a9c6fecb350403a253d2"
+						},
+						{
+							"key": "key",
+							"value": "2f70806585a5137667231fd8c6f3d353"
+						},
+						{
+							"key": "token",
+							"value": "52a0a23766ab6f94a8885c809a10f4598b6bf312310d97018ae73f9e76744e04"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Board",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"pm.environment.set(\"boardName\", \"My Board 123\");"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Your test name\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.closed).to.eql(false);\r",
+							"});\r",
+							"pm.test(\"Board should be created\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.name).to.eql(\"My Board 123\");\r",
+							"    pm.expect(jsonData.closed).to.eql(false);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "https://api.trello.com/1/boards/?name=My Board 123&key={{trellokey}}&token={{trellotoken}}&defaultLists=false",
+					"protocol": "https",
+					"host": [
+						"api",
+						"trello",
+						"com"
+					],
+					"path": [
+						"1",
+						"boards",
+						""
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "My Board 123"
+						},
+						{
+							"key": "key",
+							"value": "{{trellokey}}"
+						},
+						{
+							"key": "token",
+							"value": "{{trellotoken}}"
+						},
+						{
+							"key": "defaultLists",
+							"value": "false"
+						},
+						{
+							"key": "list",
+							"value": "TODO",
+							"disabled": true
+						},
+						{
+							"key": "idBoard",
+							"value": "5abbe4b7ddc1b351ef961414",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add new list",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"List should be created\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.name).to.eql(\"Done\");\r",
+							"    pm.expect(jsonData.closed).to.eql(false);\r",
+							"});\r",
+							"pm.test(\"List was created inside the board\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.idBoard).to.eql(\"6177a9c6fecb350403a253d2\");\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "https://api.trello.com/1/lists?name=Done&idBoard=6177a9c6fecb350403a253d2&key=2f70806585a5137667231fd8c6f3d353&token=52a0a23766ab6f94a8885c809a10f4598b6bf312310d97018ae73f9e76744e04",
+					"protocol": "https",
+					"host": [
+						"api",
+						"trello",
+						"com"
+					],
+					"path": [
+						"1",
+						"lists"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "Done"
+						},
+						{
+							"key": "idBoard",
+							"value": "6177a9c6fecb350403a253d2"
+						},
+						{
+							"key": "key",
+							"value": "2f70806585a5137667231fd8c6f3d353"
+						},
+						{
+							"key": "token",
+							"value": "52a0a23766ab6f94a8885c809a10f4598b6bf312310d97018ae73f9e76744e04"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create a card",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"pm.test(\"Card should be created\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.name).to.eql(\"Learn Postman\");\r",
+							"    pm.expect(jsonData.closed).to.eql(false);\r",
+							"    pm.expect(jsonData.idList).to.eql(\"6177bd949d30fa1bb1ce6bf6\");\r",
+							"    pm.expect(jsonData.idBoard).to.eql(\"6177a9c6fecb350403a253d2\");\r",
+							"});\r",
+							"pm.test(\"Card should have no votes or attachments\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData.badges.votes).to.eql(0);\r",
+							"    pm.expect(jsonData.badges.attachmentsByType.trello.card).to.eql(0);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "application",
+						"value": "Card",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"url": {
+					"raw": "https://api.trello.com/1/cards?idList=6177bd949d30fa1bb1ce6bf6&key=2f70806585a5137667231fd8c6f3d353&token=52a0a23766ab6f94a8885c809a10f4598b6bf312310d97018ae73f9e76744e04&name=Learn Postman&idBoard=6177a9c6fecb350403a253d2",
+					"protocol": "https",
+					"host": [
+						"api",
+						"trello",
+						"com"
+					],
+					"path": [
+						"1",
+						"cards"
+					],
+					"query": [
+						{
+							"key": "idList",
+							"value": "6177bd949d30fa1bb1ce6bf6"
+						},
+						{
+							"key": "key",
+							"value": "2f70806585a5137667231fd8c6f3d353"
+						},
+						{
+							"key": "token",
+							"value": "52a0a23766ab6f94a8885c809a10f4598b6bf312310d97018ae73f9e76744e04"
+						},
+						{
+							"key": "name",
+							"value": "Learn Postman"
+						},
+						{
+							"key": "idBoard",
+							"value": "6177a9c6fecb350403a253d2"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
